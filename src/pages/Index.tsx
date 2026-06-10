@@ -115,14 +115,15 @@ export default function Index() {
               Ваш<br/>автомобиль<br/>в надёжных<br/>руках
             </h1>
             <p className="animate-fade-up delay-200 text-white/70 font-light text-lg mb-10 leading-relaxed">
-              15 лет опыта, сертифицированные мастера,<br/>гарантия на все виды работ
+              Более 5 лет опыта, 6 специалистов,<br/>гарантия на все виды работ
             </p>
             <div className="animate-fade-up delay-300 flex flex-col sm:flex-row gap-4">
-              <button onClick={() => scrollTo("#services")} className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors">
+              <a href="tel:+79021344707" className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors flex items-center justify-center gap-2">
+                <Icon name="Phone" size={16} />
+                Позвонить
+              </a>
+              <button onClick={() => scrollTo("#services")} className="border border-white/30 text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:border-white/70 transition-colors">
                 Наши услуги
-              </button>
-              <button onClick={() => scrollTo("#contacts")} className="border border-white/30 text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:border-white/70 transition-colors">
-                Контакты
               </button>
             </div>
           </div>
