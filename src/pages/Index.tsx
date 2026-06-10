@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 
 const HERO_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/35c93d7d-8116-4a9a-9ae7-b9e4a4c4a459.jpg";
-const MECHANIC_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/a86db3a8-2c9b-445b-88a4-1e682eccf0c9.jpg";
-const RECEPTION_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/eaf5ba60-04e6-495c-8a65-f896c5d66706.jpg";
+const MECHANIC_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/23664925-df67-49a9-99b4-7f5030cd8aed.jpg";
+const RECEPTION_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/4833ea66-2472-4ab7-8760-8faed5706670.jpg";
 
 const NAV_ITEMS = [
   { label: "О сервисе", href: "#about" },
