@@ -276,7 +276,7 @@ export default function Index() {
           <div className="grid md:grid-cols-2 gap-16">
             <div className="reveal space-y-8">
               {[
-                { icon: "MapPin", label: "Адрес", value: "г. Москва, ул. Механическая, 12" },
+                { icon: "MapPin", label: "Адрес", value: "г. Мурманск, ул. Шабалина, д. 14" },
                 { icon: "Phone", label: "Телефон", value: "+7 (495) 123-45-67" },
                 { icon: "Mail", label: "Email", value: "info@automaster.ru" },
                 { icon: "Clock", label: "Режим работы", value: "Пн-Вс: 8:00 — 21:00" },
