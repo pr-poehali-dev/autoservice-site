@@ -278,7 +278,7 @@ export default function Index() {
               {[
                 { icon: "MapPin", label: "Адрес", value: "г. Мурманск, ул. Шабалина, д. 14" },
                 { icon: "Phone", label: "Телефон", value: "+7 (902) 134-47-07" },
-                { icon: "Mail", label: "Email", value: "info@automaster.ru" },
+                { icon: "Mail", label: "Email", value: "vitalii4396@yandex.ru" },
                 { icon: "Clock", label: "Режим работы", value: "Пн-Вс: 8:00 — 21:00" },
               ].map((c) => (
                 <div key={c.label} className="flex gap-5">
