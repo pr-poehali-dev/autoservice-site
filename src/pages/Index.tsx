@@ -293,11 +293,15 @@ export default function Index() {
                 </div>
               ))}
             </div>
-            <div className="reveal delay-200 bg-[hsl(0,0%,94%)] flex items-center justify-center min-h-64">
-              <div className="text-center text-foreground/30">
-                <Icon name="Map" size={48} className="mx-auto mb-4 opacity-30" />
-                <p className="text-sm font-light">Карта будет добавлена</p>
-              </div>
+            <div className="reveal delay-200 overflow-hidden" style={{ minHeight: 320 }}>
+              <iframe
+                src="https://yandex.ru/map-widget/v1/?ll=33.074635%2C68.970664&z=16&pt=33.074635,68.970664,pm2rdm&text=%D0%9C%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%2C%20%D1%83%D0%BB.%20%D0%A8%D0%B0%D0%B1%D0%B0%D0%BB%D0%B8%D0%BD%D0%B0%2C%2014"
+                width="100%"
+                height="100%"
+                style={{ minHeight: 320, border: 0 }}
+                allowFullScreen
+                title="Карта"
+              />
             </div>
           </div>
         </div>
