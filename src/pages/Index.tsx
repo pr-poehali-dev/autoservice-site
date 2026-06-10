@@ -277,7 +277,7 @@ export default function Index() {
             <div className="reveal space-y-8">
               {[
                 { icon: "MapPin", label: "Адрес", value: "г. Мурманск, ул. Шабалина, д. 14" },
-                { icon: "Phone", label: "Телефон", value: "+7 (495) 123-45-67" },
+                { icon: "Phone", label: "Телефон", value: "+7 (902) 134-47-07" },
                 { icon: "Mail", label: "Email", value: "info@automaster.ru" },
                 { icon: "Clock", label: "Режим работы", value: "Пн-Вс: 8:00 — 21:00" },
               ].map((c) => (
@@ -309,7 +309,7 @@ export default function Index() {
             ПрофСервис<span className="text-[hsl(16,100%,50%)]">Авто</span>
           </span>
           <p className="text-sm font-light">© 2024 ПрофСервисАвто. Все права защищены.</p>
-          <a href="tel:+74951234567" className="text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:text-[hsl(16,100%,60%)] transition-colors">
+          <a href="tel:+79021344707" className="text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:text-[hsl(16,100%,60%)] transition-colors">
             Позвонить →
           </a>
         </div>
