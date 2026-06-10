@@ -1,0 +1,29 @@
+{
+  "tests": [
+    {
+      "name": "GET approved reviews",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"reviews": []},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST new review",
+      "method": "POST",
+      "path": "/",
+      "body": {"name": "Иван", "car": "Toyota", "text": "Отличный сервис!", "rating": 5},
+      "expectedStatus": 201,
+      "expectedBody": {"message": "Отзыв отправлен на проверку"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "GET admin reviews",
+      "method": "GET",
+      "path": "/?admin=1",
+      "expectedStatus": 200,
+      "expectedBody": {},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

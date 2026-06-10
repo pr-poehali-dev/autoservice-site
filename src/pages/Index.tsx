@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 
+const REVIEWS_URL = "https://functions.poehali.dev/16ed3215-546a-4684-9b78-8df04a577cfb";
+
 const HERO_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/67de19e9-01c1-4ac9-b6e2-51d41845ab61.jpg";
 const MECHANIC_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/e1acae61-7073-41f3-a966-e65c71436174.jpg";
 const RECEPTION_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/f8283d3e-0080-434a-8410-c76c53d31315.jpg";
@@ -38,12 +40,6 @@ const PRICES = [
   { service: "Заказ запчастей", price: "от 500 ₽" },
 ];
 
-const REVIEWS = [
-  { name: "Сергей К.", car: "Toyota Land Cruiser 200", text: "Обратился с проблемой по АКПП — ребята разобрались быстро, объяснили всё доступно. Сделали качественно, машина работает как новая. Однозначно рекомендую!", rating: 5 },
-  { name: "Дмитрий Н.", car: "Nissan Pathfinder", text: "Делал капитальный ремонт двигателя. Сроки выдержали, цену согласовали заранее — никаких сюрпризов. Мастера знают своё дело, видно что опыт большой.", rating: 5 },
-  { name: "Алексей М.", car: "Ford Explorer", text: "Менял КПП — обратился в ПрофСервисАвто по совету знакомых. Не пожалел. Всё чётко, честно и по делу. Теперь только сюда.", rating: 5 },
-  { name: "Ольга Т.", car: "Hyundai Santa Fe", text: "Ремонтировали ходовую после зимы. Быстро диагностировали, предложили несколько вариантов решения. Осталась очень довольна — и работой, и отношением.", rating: 5 },
-];
 
 function useReveal() {
   useEffect(() => {
@@ -57,10 +53,43 @@ function useReveal() {
   }, []);
 }
 
+interface Review {
+  id: number;
+  name: string;
+  car: string;
+  text: string;
+  rating: number;
+}
+
 export default function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: "", car: "", text: "", rating: 5 });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useReveal();
+
+  useEffect(() => {
+    fetch(REVIEWS_URL)
+      .then((r) => r.json())
+      .then((d) => setReviews(d.reviews || []));
+  }, []);
+
+  const submitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    await fetch(REVIEWS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    setSending(false);
+    setSent(true);
+    setShowForm(false);
+    setForm({ name: "", car: "", text: "", rating: 5 });
+  };
 
   const scrollTo = (href: string) => {
     setMenuOpen(false);
@@ -246,26 +275,103 @@ export default function Index() {
       {/* REVIEWS */}
       <section id="reviews" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="reveal text-center mb-16">
-            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Мнения клиентов</p>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Отзывы</h2>
+          <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+            <div>
+              <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Мнения клиентов</p>
+              <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Отзывы</h2>
+            </div>
+            <button
+              onClick={() => { setShowForm(!showForm); setSent(false); }}
+              className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors flex items-center gap-2 self-start md:self-auto"
+            >
+              <Icon name="PenLine" size={16} />
+              Оставить отзыв
+            </button>
           </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {REVIEWS.map((r) => (
-              <div key={r.name} className="reveal border border-border p-8 hover:border-[hsl(16,100%,50%)] transition-colors">
-                <div className="flex mb-4 gap-0.5">
-                  {Array.from({ length: r.rating }).map((_, j) => (
-                    <Icon key={j} name="Star" size={14} className="text-[hsl(16,100%,50%)]" />
-                  ))}
-                </div>
-                <p className="text-foreground/70 font-light leading-relaxed mb-6 italic">«{r.text}»</p>
+
+          {showForm && (
+            <form onSubmit={submitReview} className="reveal border border-border p-8 mb-10 max-w-2xl">
+              <h3 className="font-display text-xl font-semibold uppercase mb-6">Ваш отзыв</h3>
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <div className="font-display font-medium text-sm uppercase">{r.name}</div>
-                  <div className="text-xs text-foreground/40 mt-1">{r.car}</div>
+                  <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Ваше имя *</label>
+                  <input
+                    required
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    className="w-full border border-border px-4 py-3 font-light text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
+                    placeholder="Иван Иванов"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Автомобиль</label>
+                  <input
+                    value={form.car}
+                    onChange={(e) => setForm({ ...form, car: e.target.value })}
+                    className="w-full border border-border px-4 py-3 font-light text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
+                    placeholder="Toyota Camry"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="mb-4">
+                <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Оценка</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <button key={s} type="button" onClick={() => setForm({ ...form, rating: s })}>
+                      <Icon name="Star" size={22} className={s <= form.rating ? "text-[hsl(16,100%,50%)]" : "text-foreground/20"} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-6">
+                <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Ваш отзыв *</label>
+                <textarea
+                  required
+                  value={form.text}
+                  onChange={(e) => setForm({ ...form, text: e.target.value })}
+                  rows={4}
+                  className="w-full border border-border px-4 py-3 font-light text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors resize-none"
+                  placeholder="Расскажите о вашем опыте..."
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={sending}
+                className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:opacity-50"
+              >
+                {sending ? "Отправляем..." : "Отправить отзыв"}
+              </button>
+            </form>
+          )}
+
+          {sent && (
+            <div className="border border-[hsl(16,100%,50%)] bg-[hsl(16,100%,50%)]/5 p-6 mb-10 max-w-2xl">
+              <p className="font-display text-sm uppercase tracking-widest text-[hsl(16,100%,50%)]">Отзыв отправлен на проверку — появится после одобрения.</p>
+            </div>
+          )}
+
+          {reviews.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {reviews.map((r) => (
+                <div key={r.id} className="reveal border border-border p-8 hover:border-[hsl(16,100%,50%)] transition-colors">
+                  <div className="flex mb-4 gap-0.5">
+                    {Array.from({ length: r.rating }).map((_, j) => (
+                      <Icon key={j} name="Star" size={14} className="text-[hsl(16,100%,50%)]" />
+                    ))}
+                  </div>
+                  <p className="text-foreground/70 font-light leading-relaxed mb-6 italic">«{r.text}»</p>
+                  <div>
+                    <div className="font-display font-medium text-sm uppercase">{r.name}</div>
+                    {r.car && <div className="text-xs text-foreground/40 mt-1">{r.car}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 text-foreground/30 font-light">
+              Пока отзывов нет — будьте первым!
+            </div>
+          )}
         </div>
       </section>
 
