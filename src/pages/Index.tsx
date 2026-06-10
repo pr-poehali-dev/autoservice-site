@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 
 const HERO_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/b1b925ba-c2ba-44df-a5b5-962ee9806ec9.jpg";
@@ -36,15 +36,6 @@ const PRICES = [
   { service: "Кузовной ремонт (элемент)", price: "от 4 500 ₽" },
 ];
 
-const MASTERS = [
-  { name: "Алексей Петров", spec: "Двигатель, диагностика", exp: "12 лет опыта" },
-  { name: "Дмитрий Козлов", spec: "Электрика, электроника", exp: "8 лет опыта" },
-  { name: "Сергей Новиков", spec: "Кузов, покраска", exp: "15 лет опыта" },
-  { name: "Михаил Орлов", spec: "Подвеска, тормоза", exp: "10 лет опыта" },
-];
-
-const TIME_SLOTS = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
-
 const REVIEWS = [
   { name: "Андрей В.", car: "BMW X5", text: "Отличный сервис! Сделали диагностику быстро, нашли проблему, которую другие не видели. Рекомендую.", rating: 5 },
   { name: "Елена М.", car: "Toyota Camry", text: "Первый раз обратилась в этот сервис — осталась очень довольна. Честно объяснили что нужно, не навязывали лишнего.", rating: 5 },
@@ -66,10 +57,6 @@ function useReveal() {
 
 export default function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [bookingStep, setBookingStep] = useState(1);
-  const [booking, setBooking] = useState({ service: "", master: "", date: "", time: "", name: "", phone: "" });
-  const [bookingDone, setBookingDone] = useState(false);
-  const bookingRef = useRef<HTMLDivElement>(null);
 
   useReveal();
 
@@ -99,12 +86,6 @@ export default function Index() {
                 {item.label}
               </a>
             ))}
-            <button
-              onClick={() => scrollTo("#booking")}
-              className="bg-[hsl(16,100%,50%)] text-white text-sm font-display font-medium tracking-wider uppercase px-5 py-2 hover:bg-[hsl(16,100%,42%)] transition-colors"
-            >
-              Записаться
-            </button>
           </div>
           <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
             <Icon name={menuOpen ? "X" : "Menu"} size={22} />
@@ -117,9 +98,6 @@ export default function Index() {
                 {item.label}
               </a>
             ))}
-            <button onClick={() => scrollTo("#booking")} className="bg-[hsl(16,100%,50%)] text-white text-sm font-display uppercase tracking-wider px-5 py-2 text-center">
-              Записаться
-            </button>
           </div>
         )}
       </nav>
@@ -140,11 +118,11 @@ export default function Index() {
               15 лет опыта, сертифицированные мастера,<br/>гарантия на все виды работ
             </p>
             <div className="animate-fade-up delay-300 flex flex-col sm:flex-row gap-4">
-              <button onClick={() => scrollTo("#booking")} className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors">
-                Записаться онлайн
-              </button>
-              <button onClick={() => scrollTo("#services")} className="border border-white/30 text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:border-white/70 transition-colors">
+              <button onClick={() => scrollTo("#services")} className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors">
                 Наши услуги
+              </button>
+              <button onClick={() => scrollTo("#contacts")} className="border border-white/30 text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:border-white/70 transition-colors">
+                Контакты
               </button>
             </div>
           </div>
@@ -278,190 +256,13 @@ export default function Index() {
                   ))}
                 </div>
                 <p className="text-foreground/70 font-light leading-relaxed mb-6 italic">«{r.text}»</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-display font-medium text-sm uppercase">{r.name}</div>
-                    <div className="text-xs text-foreground/40 mt-1">{r.car}</div>
-                  </div>
+                <div>
+                  <div className="font-display font-medium text-sm uppercase">{r.name}</div>
+                  <div className="text-xs text-foreground/40 mt-1">{r.car}</div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* BOOKING */}
-      <section id="booking" className="py-24 bg-[hsl(0,0%,8%)]" ref={bookingRef}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="reveal mb-16">
-            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Быстро и удобно</p>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase text-white">Онлайн-запись</h2>
-          </div>
-
-          {bookingDone ? (
-            <div className="max-w-xl reveal">
-              <div className="border border-[hsl(16,100%,50%)] p-12 text-center">
-                <Icon name="CheckCircle" size={48} className="text-[hsl(16,100%,50%)] mx-auto mb-6" />
-                <h3 className="font-display text-2xl uppercase text-white mb-4">Запись принята!</h3>
-                <p className="text-white/60 font-light mb-2">Мастер: <span className="text-white">{booking.master}</span></p>
-                <p className="text-white/60 font-light mb-2">Дата: <span className="text-white">{booking.date}</span></p>
-                <p className="text-white/60 font-light mb-8">Время: <span className="text-white">{booking.time}</span></p>
-                <p className="text-white/50 text-sm">Мы позвоним вам на номер <span className="text-white">{booking.phone}</span> для подтверждения</p>
-                <button
-                  onClick={() => { setBookingDone(false); setBookingStep(1); setBooking({ service: "", master: "", date: "", time: "", name: "", phone: "" }); }}
-                  className="mt-8 text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:underline"
-                >
-                  Новая запись
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="max-w-2xl">
-              {/* Steps indicator */}
-              <div className="flex items-center gap-2 mb-10">
-                {[1, 2, 3].map((s) => (
-                  <div key={s} className="flex items-center gap-2">
-                    <div className={`w-8 h-8 flex items-center justify-center font-display text-sm font-medium transition-colors
-                      ${bookingStep >= s ? "bg-[hsl(16,100%,50%)] text-white" : "bg-white/10 text-white/40"}`}>
-                      {s}
-                    </div>
-                    {s < 3 && <div className={`h-px w-12 transition-colors ${bookingStep > s ? "bg-[hsl(16,100%,50%)]" : "bg-white/20"}`} />}
-                  </div>
-                ))}
-                <span className="text-white/40 text-sm ml-4 self-center">
-                  {bookingStep === 1 ? "Услуга и мастер" : bookingStep === 2 ? "Дата и время" : "Контакты"}
-                </span>
-              </div>
-
-              {/* Step 1 */}
-              {bookingStep === 1 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Услуга</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {SERVICES.map((s) => (
-                        <button key={s.title}
-                          onClick={() => setBooking({ ...booking, service: s.title })}
-                          className={`text-left p-4 border text-sm transition-colors
-                            ${booking.service === s.title ? "border-[hsl(16,100%,50%)] bg-[hsl(16,100%,50%/0.1)] text-white" : "border-white/20 text-white/60 hover:border-white/40"}`}>
-                          {s.title}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Мастер</label>
-                    <div className="grid gap-2">
-                      {MASTERS.map((m) => (
-                        <button key={m.name}
-                          onClick={() => setBooking({ ...booking, master: m.name })}
-                          className={`text-left p-4 border transition-colors flex items-center justify-between
-                            ${booking.master === m.name ? "border-[hsl(16,100%,50%)] bg-white/5" : "border-white/20 hover:border-white/40"}`}>
-                          <div>
-                            <div className="text-white text-sm font-display uppercase">{m.name}</div>
-                            <div className="text-white/40 text-xs mt-0.5">{m.spec}</div>
-                          </div>
-                          <span className="text-white/30 text-xs">{m.exp}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <button
-                    disabled={!booking.service || !booking.master}
-                    onClick={() => setBookingStep(2)}
-                    className="w-full bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm py-4 disabled:opacity-30 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:cursor-not-allowed">
-                    Далее →
-                  </button>
-                </div>
-              )}
-
-              {/* Step 2 */}
-              {bookingStep === 2 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Дата</label>
-                    <input
-                      type="date"
-                      value={booking.date}
-                      min={new Date().toISOString().split("T")[0]}
-                      onChange={(e) => setBooking({ ...booking, date: e.target.value })}
-                      className="w-full bg-white/5 border border-white/20 text-white px-4 py-3 text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors [color-scheme:dark]"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Время</label>
-                    <div className="grid grid-cols-5 gap-2">
-                      {TIME_SLOTS.map((t) => (
-                        <button key={t}
-                          onClick={() => setBooking({ ...booking, time: t })}
-                          className={`py-3 text-sm font-display border transition-colors
-                            ${booking.time === t ? "border-[hsl(16,100%,50%)] bg-[hsl(16,100%,50%)] text-white" : "border-white/20 text-white/60 hover:border-white/40"}`}>
-                          {t}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <button onClick={() => setBookingStep(1)} className="border border-white/20 text-white/60 font-display uppercase tracking-wider text-sm px-6 py-4 hover:border-white/40 transition-colors">
-                      ← Назад
-                    </button>
-                    <button
-                      disabled={!booking.date || !booking.time}
-                      onClick={() => setBookingStep(3)}
-                      className="flex-1 bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm py-4 disabled:opacity-30 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:cursor-not-allowed">
-                      Далее →
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 3 */}
-              {bookingStep === 3 && (
-                <div className="space-y-6">
-                  <div>
-                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Ваше имя</label>
-                    <input
-                      type="text"
-                      placeholder="Иван Иванов"
-                      value={booking.name}
-                      onChange={(e) => setBooking({ ...booking, name: e.target.value })}
-                      className="w-full bg-white/5 border border-white/20 text-white px-4 py-3 text-sm placeholder:text-white/20 focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Телефон</label>
-                    <input
-                      type="tel"
-                      placeholder="+7 (999) 000-00-00"
-                      value={booking.phone}
-                      onChange={(e) => setBooking({ ...booking, phone: e.target.value })}
-                      className="w-full bg-white/5 border border-white/20 text-white px-4 py-3 text-sm placeholder:text-white/20 focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
-                    />
-                  </div>
-                  <div className="bg-white/5 border border-white/10 p-5">
-                    <div className="text-white/40 text-xs uppercase tracking-widest font-display mb-3">Сводка заявки</div>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between"><span className="text-white/50">Услуга</span><span className="text-white">{booking.service}</span></div>
-                      <div className="flex justify-between"><span className="text-white/50">Мастер</span><span className="text-white">{booking.master}</span></div>
-                      <div className="flex justify-between"><span className="text-white/50">Дата</span><span className="text-white">{booking.date}</span></div>
-                      <div className="flex justify-between"><span className="text-white/50">Время</span><span className="text-white">{booking.time}</span></div>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <button onClick={() => setBookingStep(2)} className="border border-white/20 text-white/60 font-display uppercase tracking-wider text-sm px-6 py-4 hover:border-white/40 transition-colors">
-                      ← Назад
-                    </button>
-                    <button
-                      disabled={!booking.name || !booking.phone}
-                      onClick={() => setBookingDone(true)}
-                      className="flex-1 bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm py-4 disabled:opacity-30 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:cursor-not-allowed">
-                      Подтвердить запись
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </section>
 
@@ -508,9 +309,9 @@ export default function Index() {
             Авто<span className="text-[hsl(16,100%,50%)]">Мастер</span>
           </span>
           <p className="text-sm font-light">© 2024 АвтоМастер. Все права защищены.</p>
-          <button onClick={() => scrollTo("#booking")} className="text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:text-[hsl(16,100%,60%)] transition-colors">
-            Записаться →
-          </button>
+          <a href="tel:+74951234567" className="text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:text-[hsl(16,100%,60%)] transition-colors">
+            Позвонить →
+          </a>
         </div>
       </footer>
     </div>
