@@ -1,17 +1,518 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect, useRef } from "react";
+import Icon from "@/components/ui/icon";
 
-const Index = () => {
+const HERO_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/b1b925ba-c2ba-44df-a5b5-962ee9806ec9.jpg";
+const MECHANIC_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/a86db3a8-2c9b-445b-88a4-1e682eccf0c9.jpg";
+const RECEPTION_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/eaf5ba60-04e6-495c-8a65-f896c5d66706.jpg";
+
+const NAV_ITEMS = [
+  { label: "О сервисе", href: "#about" },
+  { label: "Услуги", href: "#services" },
+  { label: "Прайс", href: "#price" },
+  { label: "Галерея", href: "#gallery" },
+  { label: "Отзывы", href: "#reviews" },
+  { label: "Контакты", href: "#contacts" },
+];
+
+const SERVICES = [
+  { icon: "Wrench", title: "Диагностика", desc: "Компьютерная диагностика всех систем автомобиля" },
+  { icon: "Settings", title: "ТО и обслуживание", desc: "Плановое техническое обслуживание по регламенту" },
+  { icon: "Zap", title: "Электрика", desc: "Ремонт и замена электрооборудования" },
+  { icon: "Gauge", title: "Двигатель", desc: "Капитальный и текущий ремонт двигателей" },
+  { icon: "Car", title: "Кузовной ремонт", desc: "Устранение вмятин, покраска, полировка" },
+  { icon: "Disc", title: "Тормоза", desc: "Замена колодок, дисков, прокачка системы" },
+  { icon: "Wind", title: "Шиномонтаж", desc: "Замена, балансировка, хранение шин" },
+  { icon: "Droplets", title: "Замена масла", desc: "Замена технических жидкостей с фильтрами" },
+];
+
+const PRICES = [
+  { service: "Компьютерная диагностика", price: "от 1 500 ₽" },
+  { service: "Замена масла + фильтр", price: "от 2 000 ₽" },
+  { service: "Техническое обслуживание", price: "от 5 000 ₽" },
+  { service: "Замена тормозных колодок", price: "от 2 500 ₽" },
+  { service: "Шиномонтаж (4 колеса)", price: "от 2 400 ₽" },
+  { service: "Развал-схождение", price: "от 3 000 ₽" },
+  { service: "Замена ремня ГРМ", price: "от 8 000 ₽" },
+  { service: "Кузовной ремонт (элемент)", price: "от 4 500 ₽" },
+];
+
+const MASTERS = [
+  { name: "Алексей Петров", spec: "Двигатель, диагностика", exp: "12 лет опыта" },
+  { name: "Дмитрий Козлов", spec: "Электрика, электроника", exp: "8 лет опыта" },
+  { name: "Сергей Новиков", spec: "Кузов, покраска", exp: "15 лет опыта" },
+  { name: "Михаил Орлов", spec: "Подвеска, тормоза", exp: "10 лет опыта" },
+];
+
+const TIME_SLOTS = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+
+const REVIEWS = [
+  { name: "Андрей В.", car: "BMW X5", text: "Отличный сервис! Сделали диагностику быстро, нашли проблему, которую другие не видели. Рекомендую.", rating: 5 },
+  { name: "Елена М.", car: "Toyota Camry", text: "Первый раз обратилась в этот сервис — осталась очень довольна. Честно объяснили что нужно, не навязывали лишнего.", rating: 5 },
+  { name: "Игорь С.", car: "Kia Sportage", text: "Делали ТО — всё чётко, по времени, без сюрпризов в счёте. Теперь только сюда езжу.", rating: 5 },
+  { name: "Наталья Р.", car: "Ford Focus", text: "Хороший автосервис, приятные мастера. Сделали быстро и качественно. Цены адекватные.", rating: 4 },
+];
+
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+export default function Index() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [bookingStep, setBookingStep] = useState(1);
+  const [booking, setBooking] = useState({ service: "", master: "", date: "", time: "", name: "", phone: "" });
+  const [bookingDone, setBookingDone] = useState(false);
+  const bookingRef = useRef<HTMLDivElement>(null);
+
+  useReveal();
+
+  const scrollTo = (href: string) => {
+    setMenuOpen(false);
+    const id = href.replace("#", "");
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
-      <span className="absolute bottom-8 left-1/2 -translate-x-1/2 inline-block bg-[#FF6637] text-white text-sm px-4 py-2 rounded-full whitespace-nowrap">
-        Подождите 5 минут, Юра создает первую версию проекта с нуля
-      </span>
+    <div className="min-h-screen bg-background font-body">
+
+      {/* NAV */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[hsl(0,0%,8%)] text-white">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+          <a href="#hero" onClick={(e) => { e.preventDefault(); scrollTo("#hero"); }} className="font-display text-xl font-semibold tracking-widest uppercase">
+            Авто<span className="text-[hsl(16,100%,50%)]">Мастер</span>
+          </a>
+          <div className="hidden md:flex items-center gap-8">
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={(e) => { e.preventDefault(); scrollTo(item.href); }}
+                className="nav-link text-sm font-light tracking-wide text-white/80 hover:text-white transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+            <button
+              onClick={() => scrollTo("#booking")}
+              className="bg-[hsl(16,100%,50%)] text-white text-sm font-display font-medium tracking-wider uppercase px-5 py-2 hover:bg-[hsl(16,100%,42%)] transition-colors"
+            >
+              Записаться
+            </button>
+          </div>
+          <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
+            <Icon name={menuOpen ? "X" : "Menu"} size={22} />
+          </button>
+        </div>
+        {menuOpen && (
+          <div className="md:hidden bg-[hsl(0,0%,5%)] border-t border-white/10 px-6 py-4 flex flex-col gap-4">
+            {NAV_ITEMS.map((item) => (
+              <a key={item.href} href={item.href} onClick={(e) => { e.preventDefault(); scrollTo(item.href); }} className="text-white/80 hover:text-white text-sm tracking-wide transition-colors">
+                {item.label}
+              </a>
+            ))}
+            <button onClick={() => scrollTo("#booking")} className="bg-[hsl(16,100%,50%)] text-white text-sm font-display uppercase tracking-wider px-5 py-2 text-center">
+              Записаться
+            </button>
+          </div>
+        )}
+      </nav>
+
+      {/* HERO */}
+      <section id="hero" className="relative min-h-screen flex items-end overflow-hidden pt-16">
+        <div className="absolute inset-0">
+          <img src={HERO_IMG} alt="Автосервис" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-transparent" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 pb-20 w-full">
+          <div className="max-w-xl">
+            <p className="animate-fade-up text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Профессиональный автосервис</p>
+            <h1 className="animate-fade-up delay-100 font-display text-5xl md:text-7xl font-semibold text-white uppercase leading-none mb-6">
+              Ваш<br/>автомобиль<br/>в надёжных<br/>руках
+            </h1>
+            <p className="animate-fade-up delay-200 text-white/70 font-light text-lg mb-10 leading-relaxed">
+              15 лет опыта, сертифицированные мастера,<br/>гарантия на все виды работ
+            </p>
+            <div className="animate-fade-up delay-300 flex flex-col sm:flex-row gap-4">
+              <button onClick={() => scrollTo("#booking")} className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors">
+                Записаться онлайн
+              </button>
+              <button onClick={() => scrollTo("#services")} className="border border-white/30 text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:border-white/70 transition-colors">
+                Наши услуги
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-8 right-8 md:right-16 z-10 flex flex-col gap-6">
+          {[
+            { num: "15+", label: "лет опыта" },
+            { num: "8 000+", label: "клиентов" },
+            { num: "98%", label: "довольных" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-right">
+              <div className="font-display text-3xl font-semibold text-white">{stat.num}</div>
+              <div className="text-white/50 text-xs tracking-widest uppercase">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="reveal">
+              <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">О нас</p>
+              <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase leading-tight mb-8">
+                Мы делаем<br/>всё правильно
+              </h2>
+              <p className="text-foreground/60 font-light leading-relaxed mb-6">
+                АвтоМастер — это команда профессионалов, которая с 2009 года помогает автовладельцам поддерживать свои автомобили в идеальном состоянии. Мы работаем с автомобилями всех марок и моделей.
+              </p>
+              <p className="text-foreground/60 font-light leading-relaxed mb-10">
+                Наш принцип: честность, качество, скорость. Мы не навязываем лишних работ, используем только оригинальные запчасти и даём гарантию на все виды ремонта.
+              </p>
+              <div className="grid grid-cols-2 gap-6">
+                {[
+                  { icon: "Shield", text: "Гарантия 12 месяцев на все работы" },
+                  { icon: "Clock", text: "Работаем без выходных 8:00–21:00" },
+                  { icon: "CheckCircle", text: "Только оригинальные запчасти" },
+                  { icon: "Users", text: "4 сертифицированных мастера" },
+                ].map((item) => (
+                  <div key={item.text} className="flex gap-3">
+                    <Icon name={item.icon} size={18} className="text-[hsl(16,100%,50%)] mt-0.5 shrink-0" />
+                    <span className="text-sm text-foreground/70 leading-snug">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="reveal delay-200 relative">
+              <img src={MECHANIC_IMG} alt="Мастер за работой" className="w-full aspect-[4/5] object-cover" />
+              <div className="absolute -bottom-6 -left-6 bg-[hsl(0,0%,8%)] text-white p-6 w-48">
+                <div className="font-display text-4xl font-semibold text-[hsl(16,100%,50%)]">15</div>
+                <div className="text-xs tracking-widest uppercase text-white/60 mt-1">лет на рынке</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICES */}
+      <section id="services" className="py-24 bg-[hsl(0,0%,96%)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal text-center mb-16">
+            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Что мы делаем</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Наши услуги</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border">
+            {SERVICES.map((s) => (
+              <div key={s.title} className="bg-white p-8 group hover:bg-[hsl(0,0%,8%)] transition-colors duration-300 cursor-pointer reveal">
+                <Icon name={s.icon} size={28} className="text-[hsl(16,100%,50%)] mb-5" />
+                <h3 className="font-display text-lg font-medium uppercase mb-2 group-hover:text-white transition-colors">{s.title}</h3>
+                <p className="text-sm text-foreground/50 leading-relaxed group-hover:text-white/60 transition-colors">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PRICE */}
+      <section id="price" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal mb-16">
+            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Прозрачность</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Прайс-лист</h2>
+          </div>
+          <div className="max-w-3xl">
+            {PRICES.map((p) => (
+              <div key={p.service} className="reveal flex items-center justify-between py-5 border-b border-border last:border-0">
+                <span className="font-light text-foreground/80">{p.service}</span>
+                <span className="font-display font-medium text-[hsl(16,100%,50%)] whitespace-nowrap ml-4">{p.price}</span>
+              </div>
+            ))}
+          </div>
+          <div className="reveal mt-8">
+            <p className="text-foreground/40 text-sm font-light">* Точная стоимость определяется после диагностики. Все цены включают работу и расходные материалы.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* GALLERY */}
+      <section id="gallery" className="py-24 bg-[hsl(0,0%,8%)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal mb-16">
+            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Наша работа</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase text-white">Галерея</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <div className="reveal md:col-span-2">
+              <img src={HERO_IMG} alt="Автосервис" className="w-full h-full object-cover" style={{ minHeight: 320 }} />
+            </div>
+            <div className="reveal delay-100 flex flex-col gap-2">
+              <img src={MECHANIC_IMG} alt="Мастер" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
+              <img src={RECEPTION_IMG} alt="Ресепшн" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* REVIEWS */}
+      <section id="reviews" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal text-center mb-16">
+            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Мнения клиентов</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Отзывы</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {REVIEWS.map((r) => (
+              <div key={r.name} className="reveal border border-border p-8 hover:border-[hsl(16,100%,50%)] transition-colors">
+                <div className="flex mb-4 gap-0.5">
+                  {Array.from({ length: r.rating }).map((_, j) => (
+                    <Icon key={j} name="Star" size={14} className="text-[hsl(16,100%,50%)]" />
+                  ))}
+                </div>
+                <p className="text-foreground/70 font-light leading-relaxed mb-6 italic">«{r.text}»</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-display font-medium text-sm uppercase">{r.name}</div>
+                    <div className="text-xs text-foreground/40 mt-1">{r.car}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* BOOKING */}
+      <section id="booking" className="py-24 bg-[hsl(0,0%,8%)]" ref={bookingRef}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal mb-16">
+            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Быстро и удобно</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase text-white">Онлайн-запись</h2>
+          </div>
+
+          {bookingDone ? (
+            <div className="max-w-xl reveal">
+              <div className="border border-[hsl(16,100%,50%)] p-12 text-center">
+                <Icon name="CheckCircle" size={48} className="text-[hsl(16,100%,50%)] mx-auto mb-6" />
+                <h3 className="font-display text-2xl uppercase text-white mb-4">Запись принята!</h3>
+                <p className="text-white/60 font-light mb-2">Мастер: <span className="text-white">{booking.master}</span></p>
+                <p className="text-white/60 font-light mb-2">Дата: <span className="text-white">{booking.date}</span></p>
+                <p className="text-white/60 font-light mb-8">Время: <span className="text-white">{booking.time}</span></p>
+                <p className="text-white/50 text-sm">Мы позвоним вам на номер <span className="text-white">{booking.phone}</span> для подтверждения</p>
+                <button
+                  onClick={() => { setBookingDone(false); setBookingStep(1); setBooking({ service: "", master: "", date: "", time: "", name: "", phone: "" }); }}
+                  className="mt-8 text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:underline"
+                >
+                  Новая запись
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-2xl">
+              {/* Steps indicator */}
+              <div className="flex items-center gap-2 mb-10">
+                {[1, 2, 3].map((s) => (
+                  <div key={s} className="flex items-center gap-2">
+                    <div className={`w-8 h-8 flex items-center justify-center font-display text-sm font-medium transition-colors
+                      ${bookingStep >= s ? "bg-[hsl(16,100%,50%)] text-white" : "bg-white/10 text-white/40"}`}>
+                      {s}
+                    </div>
+                    {s < 3 && <div className={`h-px w-12 transition-colors ${bookingStep > s ? "bg-[hsl(16,100%,50%)]" : "bg-white/20"}`} />}
+                  </div>
+                ))}
+                <span className="text-white/40 text-sm ml-4 self-center">
+                  {bookingStep === 1 ? "Услуга и мастер" : bookingStep === 2 ? "Дата и время" : "Контакты"}
+                </span>
+              </div>
+
+              {/* Step 1 */}
+              {bookingStep === 1 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Услуга</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {SERVICES.map((s) => (
+                        <button key={s.title}
+                          onClick={() => setBooking({ ...booking, service: s.title })}
+                          className={`text-left p-4 border text-sm transition-colors
+                            ${booking.service === s.title ? "border-[hsl(16,100%,50%)] bg-[hsl(16,100%,50%/0.1)] text-white" : "border-white/20 text-white/60 hover:border-white/40"}`}>
+                          {s.title}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Мастер</label>
+                    <div className="grid gap-2">
+                      {MASTERS.map((m) => (
+                        <button key={m.name}
+                          onClick={() => setBooking({ ...booking, master: m.name })}
+                          className={`text-left p-4 border transition-colors flex items-center justify-between
+                            ${booking.master === m.name ? "border-[hsl(16,100%,50%)] bg-white/5" : "border-white/20 hover:border-white/40"}`}>
+                          <div>
+                            <div className="text-white text-sm font-display uppercase">{m.name}</div>
+                            <div className="text-white/40 text-xs mt-0.5">{m.spec}</div>
+                          </div>
+                          <span className="text-white/30 text-xs">{m.exp}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    disabled={!booking.service || !booking.master}
+                    onClick={() => setBookingStep(2)}
+                    className="w-full bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm py-4 disabled:opacity-30 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:cursor-not-allowed">
+                    Далее →
+                  </button>
+                </div>
+              )}
+
+              {/* Step 2 */}
+              {bookingStep === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Дата</label>
+                    <input
+                      type="date"
+                      value={booking.date}
+                      min={new Date().toISOString().split("T")[0]}
+                      onChange={(e) => setBooking({ ...booking, date: e.target.value })}
+                      className="w-full bg-white/5 border border-white/20 text-white px-4 py-3 text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors [color-scheme:dark]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Время</label>
+                    <div className="grid grid-cols-5 gap-2">
+                      {TIME_SLOTS.map((t) => (
+                        <button key={t}
+                          onClick={() => setBooking({ ...booking, time: t })}
+                          className={`py-3 text-sm font-display border transition-colors
+                            ${booking.time === t ? "border-[hsl(16,100%,50%)] bg-[hsl(16,100%,50%)] text-white" : "border-white/20 text-white/60 hover:border-white/40"}`}>
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <button onClick={() => setBookingStep(1)} className="border border-white/20 text-white/60 font-display uppercase tracking-wider text-sm px-6 py-4 hover:border-white/40 transition-colors">
+                      ← Назад
+                    </button>
+                    <button
+                      disabled={!booking.date || !booking.time}
+                      onClick={() => setBookingStep(3)}
+                      className="flex-1 bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm py-4 disabled:opacity-30 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:cursor-not-allowed">
+                      Далее →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3 */}
+              {bookingStep === 3 && (
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Ваше имя</label>
+                    <input
+                      type="text"
+                      placeholder="Иван Иванов"
+                      value={booking.name}
+                      onChange={(e) => setBooking({ ...booking, name: e.target.value })}
+                      className="w-full bg-white/5 border border-white/20 text-white px-4 py-3 text-sm placeholder:text-white/20 focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-white/50 text-xs uppercase tracking-widest font-display mb-3 block">Телефон</label>
+                    <input
+                      type="tel"
+                      placeholder="+7 (999) 000-00-00"
+                      value={booking.phone}
+                      onChange={(e) => setBooking({ ...booking, phone: e.target.value })}
+                      className="w-full bg-white/5 border border-white/20 text-white px-4 py-3 text-sm placeholder:text-white/20 focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
+                    />
+                  </div>
+                  <div className="bg-white/5 border border-white/10 p-5">
+                    <div className="text-white/40 text-xs uppercase tracking-widest font-display mb-3">Сводка заявки</div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between"><span className="text-white/50">Услуга</span><span className="text-white">{booking.service}</span></div>
+                      <div className="flex justify-between"><span className="text-white/50">Мастер</span><span className="text-white">{booking.master}</span></div>
+                      <div className="flex justify-between"><span className="text-white/50">Дата</span><span className="text-white">{booking.date}</span></div>
+                      <div className="flex justify-between"><span className="text-white/50">Время</span><span className="text-white">{booking.time}</span></div>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <button onClick={() => setBookingStep(2)} className="border border-white/20 text-white/60 font-display uppercase tracking-wider text-sm px-6 py-4 hover:border-white/40 transition-colors">
+                      ← Назад
+                    </button>
+                    <button
+                      disabled={!booking.name || !booking.phone}
+                      onClick={() => setBookingDone(true)}
+                      className="flex-1 bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm py-4 disabled:opacity-30 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:cursor-not-allowed">
+                      Подтвердить запись
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CONTACTS */}
+      <section id="contacts" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="reveal mb-16">
+            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Найти нас</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Контакты</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-16">
+            <div className="reveal space-y-8">
+              {[
+                { icon: "MapPin", label: "Адрес", value: "г. Москва, ул. Механическая, 12" },
+                { icon: "Phone", label: "Телефон", value: "+7 (495) 123-45-67" },
+                { icon: "Mail", label: "Email", value: "info@automaster.ru" },
+                { icon: "Clock", label: "Режим работы", value: "Пн-Вс: 8:00 — 21:00" },
+              ].map((c) => (
+                <div key={c.label} className="flex gap-5">
+                  <div className="w-12 h-12 bg-[hsl(0,0%,8%)] flex items-center justify-center shrink-0">
+                    <Icon name={c.icon} size={18} className="text-[hsl(16,100%,50%)]" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-foreground/40 uppercase tracking-widest font-display mb-1">{c.label}</div>
+                    <div className="font-light text-foreground/80">{c.value}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="reveal delay-200 bg-[hsl(0,0%,94%)] flex items-center justify-center min-h-64">
+              <div className="text-center text-foreground/30">
+                <Icon name="Map" size={48} className="mx-auto mb-4 opacity-30" />
+                <p className="text-sm font-light">Карта будет добавлена</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-[hsl(0,0%,5%)] text-white/40 py-10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <span className="font-display text-lg font-semibold text-white/80 tracking-widest uppercase">
+            Авто<span className="text-[hsl(16,100%,50%)]">Мастер</span>
+          </span>
+          <p className="text-sm font-light">© 2024 АвтоМастер. Все права защищены.</p>
+          <button onClick={() => scrollTo("#booking")} className="text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:text-[hsl(16,100%,60%)] transition-colors">
+            Записаться →
+          </button>
+        </div>
+      </footer>
     </div>
   );
-};
-
-export default Index;
+}
