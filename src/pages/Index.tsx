@@ -279,7 +279,7 @@ export default function Index() {
                 { icon: "MapPin", label: "Адрес", value: "г. Мурманск, ул. Шабалина, д. 14" },
                 { icon: "Phone", label: "Телефон", value: "+7 (902) 134-47-07" },
                 { icon: "Mail", label: "Email", value: "vitalii4396@yandex.ru" },
-                { icon: "Clock", label: "Режим работы", value: "Пн-Вс: 8:00 — 21:00" },
+                { icon: "Clock", label: "Режим работы", value: "Пн-Вс: 10:00 — 19:00" },
               ].map((c) => (
                 <div key={c.label} className="flex gap-5">
                   <div className="w-12 h-12 bg-[hsl(0,0%,8%)] flex items-center justify-center shrink-0">
