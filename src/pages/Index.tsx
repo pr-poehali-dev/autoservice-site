@@ -129,8 +129,8 @@ export default function Index() {
         </div>
         <div className="absolute bottom-8 right-8 md:right-16 z-10 flex flex-col gap-6">
           {[
-            { num: "15+", label: "лет опыта" },
-            { num: "8 000+", label: "клиентов" },
+            { num: "5+", label: "лет опыта" },
+            { num: "6", label: "специалистов" },
             { num: "98%", label: "довольных" },
           ].map((stat) => (
             <div key={stat.label} className="text-right">
@@ -151,17 +151,17 @@ export default function Index() {
                 Мы делаем<br/>всё правильно
               </h2>
               <p className="text-foreground/60 font-light leading-relaxed mb-6">
-                АвтоМастер — это команда профессионалов, которая с 2009 года помогает автовладельцам поддерживать свои автомобили в идеальном состоянии. Мы работаем с автомобилями всех марок и моделей.
+                ПрофСервисАвто — это команда из 6 опытных специалистов, которая более 5 лет помогает автовладельцам Мурманска поддерживать свои автомобили в идеальном состоянии. Работаем с любыми марками и моделями.
               </p>
               <p className="text-foreground/60 font-light leading-relaxed mb-10">
-                Наш принцип: честность, качество, скорость. Мы не навязываем лишних работ, используем только оригинальные запчасти и даём гарантию на все виды ремонта.
+                Наш принцип: честность, качество, скорость. Мы не навязываем лишних работ, используем только качественные запчасти и даём гарантию на все виды ремонта.
               </p>
               <div className="grid grid-cols-2 gap-6">
                 {[
-                  { icon: "Shield", text: "Гарантия 12 месяцев на все работы" },
-                  { icon: "Clock", text: "Работаем без выходных 8:00–21:00" },
-                  { icon: "CheckCircle", text: "Только оригинальные запчасти" },
-                  { icon: "Users", text: "4 сертифицированных мастера" },
+                  { icon: "Shield", text: "Гарантия на все виды работ" },
+                  { icon: "Clock", text: "Работаем Пн-Вс: 10:00–19:00" },
+                  { icon: "CheckCircle", text: "Любые марки автомобилей" },
+                  { icon: "Users", text: "6 опытных специалистов" },
                 ].map((item) => (
                   <div key={item.text} className="flex gap-3">
                     <Icon name={item.icon} size={18} className="text-[hsl(16,100%,50%)] mt-0.5 shrink-0" />
@@ -173,7 +173,7 @@ export default function Index() {
             <div className="reveal delay-200 relative">
               <img src={MECHANIC_IMG} alt="Мастер за работой" className="w-full aspect-[4/5] object-cover" />
               <div className="absolute -bottom-6 -left-6 bg-[hsl(0,0%,8%)] text-white p-6 w-48">
-                <div className="font-display text-4xl font-semibold text-[hsl(16,100%,50%)]">15</div>
+                <div className="font-display text-4xl font-semibold text-[hsl(16,100%,50%)]">5+</div>
                 <div className="text-xs tracking-widest uppercase text-white/60 mt-1">лет на рынке</div>
               </div>
             </div>
