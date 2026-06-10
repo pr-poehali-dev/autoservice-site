@@ -73,7 +73,7 @@ export default function Index() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[hsl(0,0%,8%)] text-white">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
           <a href="#hero" onClick={(e) => { e.preventDefault(); scrollTo("#hero"); }} className="font-display text-xl font-semibold tracking-widest uppercase">
-            Авто<span className="text-[hsl(16,100%,50%)]">Мастер</span>
+            ПрофСервис<span className="text-[hsl(16,100%,50%)]">Авто</span>
           </a>
           <div className="hidden md:flex items-center gap-8">
             {NAV_ITEMS.map((item) => (
@@ -306,9 +306,9 @@ export default function Index() {
       <footer className="bg-[hsl(0,0%,5%)] text-white/40 py-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <span className="font-display text-lg font-semibold text-white/80 tracking-widest uppercase">
-            Авто<span className="text-[hsl(16,100%,50%)]">Мастер</span>
+            ПрофСервис<span className="text-[hsl(16,100%,50%)]">Авто</span>
           </span>
-          <p className="text-sm font-light">© 2024 АвтоМастер. Все права защищены.</p>
+          <p className="text-sm font-light">© 2024 ПрофСервисАвто. Все права защищены.</p>
           <a href="tel:+74951234567" className="text-[hsl(16,100%,50%)] text-sm font-display uppercase tracking-wider hover:text-[hsl(16,100%,60%)] transition-colors">
             Позвонить →
           </a>
