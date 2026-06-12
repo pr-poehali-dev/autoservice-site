@@ -64,10 +64,6 @@ interface Review {
 export default function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ name: "", car: "", text: "", rating: 5 });
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
 
   useReveal();
 
@@ -76,20 +72,6 @@ export default function Index() {
       .then((r) => r.json())
       .then((d) => setReviews(d.reviews || []));
   }, []);
-
-  const submitReview = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    await fetch(REVIEWS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    setSending(false);
-    setSent(true);
-    setShowForm(false);
-    setForm({ name: "", car: "", text: "", rating: 5 });
-  };
 
   const scrollTo = (href: string) => {
     setMenuOpen(false);
@@ -275,80 +257,10 @@ export default function Index() {
       {/* REVIEWS */}
       <section id="reviews" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-            <div>
-              <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Мнения клиентов</p>
-              <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Отзывы</h2>
-            </div>
-            <button
-              onClick={() => { setShowForm(!showForm); setSent(false); }}
-              className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors flex items-center gap-2 self-start md:self-auto"
-            >
-              <Icon name="PenLine" size={16} />
-              Оставить отзыв
-            </button>
+          <div className="reveal mb-16">
+            <p className="text-[hsl(16,100%,50%)] font-display text-sm tracking-[0.25em] uppercase mb-4">Мнения клиентов</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold uppercase">Отзывы</h2>
           </div>
-
-          {showForm && (
-            <form onSubmit={submitReview} className="reveal border border-border p-8 mb-10 max-w-2xl">
-              <h3 className="font-display text-xl font-semibold uppercase mb-6">Ваш отзыв</h3>
-              <div className="grid md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Ваше имя *</label>
-                  <input
-                    required
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full border border-border px-4 py-3 font-light text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
-                    placeholder="Иван Иванов"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Автомобиль</label>
-                  <input
-                    value={form.car}
-                    onChange={(e) => setForm({ ...form, car: e.target.value })}
-                    className="w-full border border-border px-4 py-3 font-light text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors"
-                    placeholder="Toyota Camry"
-                  />
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Оценка</label>
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <button key={s} type="button" onClick={() => setForm({ ...form, rating: s })}>
-                      <Icon name="Star" size={22} className={s <= form.rating ? "text-[hsl(16,100%,50%)]" : "text-foreground/20"} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="mb-6">
-                <label className="block text-xs text-foreground/40 uppercase tracking-widest font-display mb-2">Ваш отзыв *</label>
-                <textarea
-                  required
-                  value={form.text}
-                  onChange={(e) => setForm({ ...form, text: e.target.value })}
-                  rows={4}
-                  className="w-full border border-border px-4 py-3 font-light text-sm focus:outline-none focus:border-[hsl(16,100%,50%)] transition-colors resize-none"
-                  placeholder="Расскажите о вашем опыте..."
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={sending}
-                className="bg-[hsl(16,100%,50%)] text-white font-display uppercase tracking-widest text-sm px-8 py-4 hover:bg-[hsl(16,100%,42%)] transition-colors disabled:opacity-50"
-              >
-                {sending ? "Отправляем..." : "Отправить отзыв"}
-              </button>
-            </form>
-          )}
-
-          {sent && (
-            <div className="border border-[hsl(16,100%,50%)] bg-[hsl(16,100%,50%)]/5 p-6 mb-10 max-w-2xl">
-              <p className="font-display text-sm uppercase tracking-widest text-[hsl(16,100%,50%)]">Отзыв отправлен на проверку — появится после одобрения.</p>
-            </div>
-          )}
 
           {reviews.length > 0 ? (
             <div className="grid md:grid-cols-2 gap-6">
