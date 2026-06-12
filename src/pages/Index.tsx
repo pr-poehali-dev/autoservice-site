@@ -4,8 +4,9 @@ import Icon from "@/components/ui/icon";
 const REVIEWS_URL = "https://functions.poehali.dev/16ed3215-546a-4684-9b78-8df04a577cfb";
 
 const HERO_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/67de19e9-01c1-4ac9-b6e2-51d41845ab61.jpg";
-const MECHANIC_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/e1acae61-7073-41f3-a966-e65c71436174.jpg";
-const RECEPTION_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/files/f8283d3e-0080-434a-8410-c76c53d31315.jpg";
+const GALLERY_IMG1 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/e2d8dd28-5c7a-4d50-92c0-01ca6516834d.JPG";
+const GALLERY_IMG2 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/70007983-ff45-4fef-9d28-7f8846fa8de2.JPG";
+const GALLERY_IMG3 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/5ad382f1-2832-4589-aee7-cc683990724e.JPG";
 
 const NAV_ITEMS = [
   { label: "О сервисе", href: "#about" },
@@ -244,11 +245,11 @@ export default function Index() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <div className="reveal md:col-span-2">
-              <img src={HERO_IMG} alt="Автосервис" className="w-full h-full object-cover" style={{ minHeight: 320 }} />
+              <img src={GALLERY_IMG1} alt="Автосервис" className="w-full h-full object-cover" style={{ minHeight: 320 }} />
             </div>
             <div className="reveal delay-100 flex flex-col gap-2">
-              <img src={MECHANIC_IMG} alt="Мастер" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
-              <img src={RECEPTION_IMG} alt="Ресепшн" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
+              <img src={GALLERY_IMG2} alt="Автосервис" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
+              <img src={GALLERY_IMG3} alt="Автосервис" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
             </div>
           </div>
         </div>
