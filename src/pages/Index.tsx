@@ -186,7 +186,7 @@ export default function Index() {
               </div>
             </div>
             <div className="reveal delay-200 relative">
-              <img src={MECHANIC_IMG} alt="Мастер за работой" className="w-full aspect-[4/5] object-cover" />
+              <img src={GALLERY_IMG2} alt="Мастер за работой" className="w-full aspect-[4/5] object-cover" />
               <div className="absolute -bottom-6 -left-6 bg-[hsl(0,0%,8%)] text-white p-6 w-48">
                 <div className="font-display text-4xl font-semibold text-[hsl(16,100%,50%)]">5+</div>
                 <div className="text-xs tracking-widest uppercase text-white/60 mt-1">лет на рынке</div>
