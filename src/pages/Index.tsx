@@ -7,6 +7,10 @@ const HERO_IMG = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b5
 const GALLERY_IMG1 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/e2d8dd28-5c7a-4d50-92c0-01ca6516834d.JPG";
 const GALLERY_IMG2 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/70007983-ff45-4fef-9d28-7f8846fa8de2.JPG";
 const GALLERY_IMG3 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/5ad382f1-2832-4589-aee7-cc683990724e.JPG";
+const GALLERY_IMG4 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/b307ad9c-b11c-4896-8665-ba6150ce5241.JPG";
+const GALLERY_IMG5 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/1c4f3da7-d141-4b5d-bd41-beaadbe0c7cd.JPG";
+const GALLERY_IMG6 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/bf907afd-53d2-4884-8c09-c28bc08c5566.JPG";
+const GALLERY_IMG7 = "https://cdn.poehali.dev/projects/73c21dd3-1f26-4c4c-8fab-810b551774c2/bucket/c9f3dcf8-4936-4a45-abd7-62dc8f30ebcf.JPG";
 
 const NAV_ITEMS = [
   { label: "О сервисе", href: "#about" },
@@ -250,6 +254,20 @@ export default function Index() {
             <div className="reveal delay-100 flex flex-col gap-2">
               <img src={GALLERY_IMG2} alt="Автосервис" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
               <img src={GALLERY_IMG3} alt="Автосервис" className="w-full flex-1 object-cover" style={{ minHeight: 156 }} />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+            <div className="reveal">
+              <img src={GALLERY_IMG4} alt="Автосервис" className="w-full object-cover" style={{ height: 200 }} />
+            </div>
+            <div className="reveal delay-100">
+              <img src={GALLERY_IMG5} alt="Автосервис" className="w-full object-cover" style={{ height: 200 }} />
+            </div>
+            <div className="reveal delay-200">
+              <img src={GALLERY_IMG6} alt="Автосервис" className="w-full object-cover" style={{ height: 200 }} />
+            </div>
+            <div className="reveal delay-300">
+              <img src={GALLERY_IMG7} alt="Автосервис" className="w-full object-cover" style={{ height: 200 }} />
             </div>
           </div>
         </div>
